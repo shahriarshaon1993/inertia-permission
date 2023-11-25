@@ -34,7 +34,16 @@ defineProps(['permissions']);
                         <TableRow v-for="(permission, index) in permissions" :key="index" class="border-b">
                             <TableDataCell>{{ permission.id }}</TableDataCell>
                             <TableDataCell>{{ permission.name }}</TableDataCell>
-                            <TableDataCell>Edit/Delete</TableDataCell>
+                            <TableDataCell class="space-x-2">
+                                <Link :href="route('permissions.edit', permission.id)"
+                                    class=" text-green-400 hover:text-green-600">
+                                Edit
+                                </Link>
+                                <Link :href="route('permissions.destroy', permission.id)" method="DELETE" as="button"
+                                    class=" text-red-400 hover:text-red-600">
+                                Delete
+                                </Link>
+                            </TableDataCell>
                         </TableRow>
                     </template>
                 </Table>

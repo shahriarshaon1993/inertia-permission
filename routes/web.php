@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PermissoinController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\RemoveRoleFromUserController;
 use App\Http\Controllers\RemovePermissionFromUserController;
 use App\Http\Controllers\RevokePermissionFromRoleController;
@@ -35,6 +36,8 @@ Route::get('/', function () {
 Route::resource('/users', UserController::class);
 Route::resource('/roles', RoleController::class);
 Route::resource('/permissions', PermissoinController::class);
+
+Route::resource('/posts', PostController::class);
 
 Route::delete(
     '/roles/{role}/permissions/{permission}',

@@ -1,0 +1,86 @@
+<script setup>
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import Table from '@/Components/Table.vue';
+import TableRow from '@/Components/TableRow.vue';
+import TableHeaderCell from '@/Components/TableHeaderCell.vue';
+import TableDataCell from '@/Components/TableDataCell.vue';
+import Modal from '@/Components/Modal.vue';
+import DangerButton from '@/Components/DangerButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
+
+defineProps(['posts']);
+
+const showConfirmDeletePostModal = ref(false);
+
+const form = useForm({});
+
+const confirmDeletePost = () => {
+    showConfirmDeletePostModal.value = true;
+};
+
+const closeModal = () => {
+    showConfirmDeletePostModal.value = false;
+};
+
+const deletePost = (id) => {
+    form.delete(route('posts.destroy', id), {
+        onSuccess: () => closeModal()
+    });
+};
+</script>
+
+<template>
+    <Head title="Posts" />
+
+    <AdminLayout>
+        <div class="py-4">
+            <div class="flex justify-between items-center">
+                <h1>Welcome, Posts</h1>
+                <Link :href="route('posts.create')"
+                    class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo-700 rounded">
+                New Post
+                </Link>
+            </div>
+            <div class="mt-6">
+                <Table>
+                    <template #header>
+                        <TableHeaderCell>Id</TableHeaderCell>
+                        <TableHeaderCell>Title</TableHeaderCell>
+                        <TableHeaderCell>Actions</TableHeaderCell>
+                    </template>
+
+                    <template #default>
+                        <TableRow v-for="(post, index) in posts" :key="index" class="border-b">
+                            <TableDataCell>{{ post.id }}</TableDataCell>
+                            <TableDataCell>{{ post.title }}</TableDataCell>
+                            <TableDataCell class="space-x-2">
+                                <Link :href="route('posts.edit', post.id)" class=" text-green-400 hover:text-green-600">
+                                Edit
+                                </Link>
+                                <button @click="confirmDeletePost" class=" text-red-400 hover:text-red-600">
+                                    Delete
+                                </button>
+
+                                <!-- Confirm Modal -->
+                                <Modal :show="showConfirmDeletePostModal" @click="closeModal">
+                                    <div class="p-6">
+                                        <h2 class="text-lg font-semibold text-white">
+                                            Are you sure to delete this post?
+                                        </h2>
+                                        <div class="mt-6 flex space-x-4">
+                                            <DangerButton @click="deletePost(post.id)">Delete</DangerButton>
+                                            <SecondaryButton @click="closeModal">Cancel</SecondaryButton>
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </TableDataCell>
+                        </TableRow>
+                    </template>
+                </Table>
+            </div>
+        </div>
+    </AdminLayout>
+</template>

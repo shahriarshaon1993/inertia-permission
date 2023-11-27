@@ -1,14 +1,16 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\PermissoinController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RevokePermissionFromRoleController;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PermissoinController;
+use App\Http\Controllers\RemoveRoleFromUserController;
+use App\Http\Controllers\RemovePermissionFromUserController;
+use App\Http\Controllers\RevokePermissionFromRoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,10 +35,21 @@ Route::get('/', function () {
 Route::resource('/users', UserController::class);
 Route::resource('/roles', RoleController::class);
 Route::resource('/permissions', PermissoinController::class);
+
 Route::delete(
     '/roles/{role}/permissions/{permission}',
     RevokePermissionFromRoleController::class
 )->name('roles.permissions.destroy');
+
+Route::delete(
+    '/users/{user}/permissions/{permission}',
+    RemovePermissionFromUserController::class
+)->name('users.permissions.destroy');
+
+Route::delete(
+    '/users/{user}/roles/{role}',
+    RemoveRoleFromUserController::class
+)->name('users.roles.destroy');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

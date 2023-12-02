@@ -1,15 +1,17 @@
 <script setup>
-import { ref } from 'vue';
+
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+
 import { usePermission } from '@/Composables/permissions';
+import { Link } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 const showingNavigationDropdown = ref(false);
-const { hasRole } = usePermission();
+const { hasRole, hasRoles } = usePermission();
 
 </script>
 
@@ -37,7 +39,8 @@ const { hasRole } = usePermission();
                                     :active="route().current('users.index')">
                                     Admin
                                 </NavLink>
-                                <NavLink :href="route('posts.index')" :active="route().current('posts.index')">
+                                <NavLink v-if="hasRoles(['admin', 'moderator', 'writer'])" :href="route('posts.index')"
+                                    :active="route().current('posts.index')">
                                     Posts
                                 </NavLink>
                             </div>
